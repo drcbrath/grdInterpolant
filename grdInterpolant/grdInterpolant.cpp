@@ -16,7 +16,6 @@ const int VerPatch = PATCH;
 const char VerRevision[] = REV;
 const char VerString[] = STR(PROGNAME) " v" STR(MAJOR) "." STR(MINOR) "." STR(PATCH);
 
-#include <iostream>
 #include "grdInterpolant.h"
 
 using namespace std;
@@ -262,7 +261,6 @@ grdInterpolantND::~grdInterpolantND()
 double grdInterpolantND::interp(std::vector<double> x)
 {
    size_t mask;
-   size_t m, n;
    size_t Nxiv;
    double v;
 

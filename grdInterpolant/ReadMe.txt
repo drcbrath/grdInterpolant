@@ -1,11 +1,9 @@
 ========================================================================
-    CONSOLE APPLICATION : grdInterpolant Project Overview
+    STATIC LIBRARY : grdInterpolant Project Overview
 ========================================================================
 
-AppWizard has created this grdInterpolant application for you.
-
-This file contains a summary of what you will find in each of the files that
-make up your grdInterpolant application.
+grdInterpolant classes provide data structure and methods for linear
+interpolation in 1-D, 2-D, 3-D, N-D of gridded data.
 
 
 grdInterpolant.vcxproj
@@ -22,19 +20,8 @@ grdInterpolant.vcxproj.filters
     "Source Files" filter).
 
 grdInterpolant.cpp
-    This is the main application source file.
+    This is the library source file.
 
-/////////////////////////////////////////////////////////////////////////////
-Other standard files:
-
-StdAfx.h, StdAfx.cpp
-    These files are used to build a precompiled header (PCH) file
-    named grdInterpolant.pch and a precompiled types file named StdAfx.obj.
-
-/////////////////////////////////////////////////////////////////////////////
-Other notes:
-
-AppWizard uses "TODO:" comments to indicate parts of the source code you
-should add to or customize.
-
-/////////////////////////////////////////////////////////////////////////////
+grdInterpolant.h
+    include file, for use by applications linking to grdInterpolant.lib
+    contains class definitions
