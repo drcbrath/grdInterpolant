@@ -34,7 +34,6 @@ int bplookup(std::vector<double> bp, double &x, int xtrpLt, int xtrpRt, size_t &
 
       na = 0;
       nb = bp.size() - 1;
-      nc = (nb - na) / 2;   // 1st guess in the middle
 
       if (x < bp[0])  // x below interval (note: okay for singleton dimension)
       {
@@ -58,20 +57,25 @@ int bplookup(std::vector<double> bp, double &x, int xtrpLt, int xtrpRt, size_t &
       {
             while (nb - na > 1)
             {
-               if (bp[nc] <= x)
-               {   // next guess in upper interval
+               nc = (nb + na) / 2;   // guess in the middle
+               if (bp[nc] <= x)      // next guess in upper interval
                   na = nc;
-                  nc = (nb - na) / 2;
+               else if (bp[nc] == x)
+               {                     // found it
+                  na = nc;
+                  break;
                }
-               else
-               {   // next guess in lower interval
+               else                  // next guess in lower interval
                   nb = nc;
-                  nc = (nb - na) / 2;
-               }
             }
             nd = na;     // found it
             return(0);   // return success
          }
+      else if (bp[nb] == x)      // found it on last breakpoint
+      {
+         nd = nb-1 ;
+         return(0);   // return success
+      }
       else   // x above interval (note: okay for singleton dimension)
       {
          nd = nb - 1;   // set to use last subinterval
