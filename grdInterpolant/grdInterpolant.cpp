@@ -195,8 +195,12 @@ grdInterpolant3D::grdInterpolant3D()
 {
 }
 
-grdInterpolant3D::grdInterpolant3D(std::vector<double>xi, std::vector<double>xj, std::vector<double>yk, std::vector< std::vector< std::vector<double> > > vijk)
+grdInterpolant3D::grdInterpolant3D(std::vector<double>xi, std::vector<double>yj, std::vector<double>zk, std::vector< std::vector< std::vector<double> > > vijk)
 {
+   bp1 = xi;
+   bp2 = yj;
+   bp3 = zk;
+   table = vijk;
 }
 
 grdInterpolant3D::~grdInterpolant3D()
@@ -242,7 +246,7 @@ double grdInterpolant3D::interp(double x1, double x2, double x3)
 
    v = (1 - u)*(1 - t)*(1 - s)*v000 + (1 - u)*(1 - t)*(s)*v001 +
        (1 - u)*(t)*(1 - s)*v010 + (1 - u)*(t)*(s)*v011 +
-       (1 - u)*(1 - t)*(1 - s)*v100 + (1 - u)*(1 - t)*(s)*v101 +
+       (u)*(1 - t)*(1 - s)*v100 + (u)*(1 - t)*(s)*v101 +
        (u)*(t)*(1 - s)*v110 + (u)*(t)*(s)*v111;
 
    return(v);
@@ -256,6 +260,34 @@ grdInterpolantND::grdInterpolantND()
 
 grdInterpolantND::grdInterpolantND(std::vector< std::vector<double> > bpXs, std::vector<double> bpValues)
 {
+   bps = bpXs;         // copy vector of breakpoint vectors
+   table = bpValues;   // copy table values at breakpoints
+
+   nDims = bps.size();       // number of dimensions, aka tensor rank
+   nverts = 1i64 << nDims;   // pow(2, nDims);   // number of table vertices surrounding input point (x1, x2, x3, ..., xn) at which to interpolate
+
+   // resize per nDims to make room
+   sizes.resize(nDims);
+   xtrpLt.resize(nDims);
+   xtrpRt.resize(nDims);
+   Nofs.resize(nDims);   // vector of offsets from subscript indices into table(j1,j2,j3, ..., jn) to linear index table(i)
+   nds.resize(nDims);    // vector of indices found from lookup of input x into each breakpoint vector
+   xf.resize(nDims);     // vector of graction of distance of xi between dim[m] endpoints; i.e. xa --- xi ------xb, xf = dist(xa,xi)/dist(xa,xb)
+   cxf.resize(nDims);    // vector of 1-xf
+
+  for (size_t i = 0; i < nDims; i++)   
+   {
+      sizes[i] = bps[i].size();    // vector of size of each dimension (like return from matlab size(table) )
+      xtrpLt[i] = LINEAR;          // default extrapolation handling
+      xtrpRt[i] = LINEAR;
+   }
+
+  Nofs[0] = 1;   // initialize cummulative product
+  for (size_t i = 0; i < nDims-1; i++)
+  {
+     Nofs[i + 1] = sizes[i] * Nofs[i];
+  }
+   
 }
 
 grdInterpolantND::~grdInterpolantND()

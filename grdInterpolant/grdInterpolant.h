@@ -84,10 +84,7 @@ public:
    std::vector<int> xtrpLt;
    std::vector<int> xtrpRt;
 
-   std::vector< std::array<char, 2> > exfs;   // vector of extrapolation flags ?
-
    std::vector< std::vector<double> > bps;   // vector of breakpoint vectors for independent variables
-
    std::vector<double> table;   // N-D table as a vector (needs indexing function to access like a multi-dimensional table)
 
    grdInterpolantND();
